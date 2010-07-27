@@ -119,19 +119,42 @@ tpl [IterStep/By] { if [(count(Ref)>0)] {
 tpl [From](#nbr) 
 { 
     linkbyif(#line=`@line`,#col=`@col`,#by="from");
+    
     <span 
     { 
         @class="lab";
-        getref(#k="S", #anr=`@articlenr`, #nr=`@nr`); "(";
-	list(#separ=", ", #elems=`Ref`); ")"; ";"; 
+	
+	if [@articlenr=0] {
+		$nr = `@nr`;
+		$nm =  get_vid_name(#vid = `//SchemeBlock[@schemenr=$nr]/@vid`);
+        	getref(#k="S", #anr=`@articlenr`, #nr=`@nr`, #nm =  `$nm` );
+	} else {
+		getref(#k="S", #anr=`@articlenr`, #nr=`@nr` );
+	}
+
+	if [Ref] { "("; list(#separ=", ", #elems=`Ref`); ")"; } 
+	";"; 
 	if [not($nbr="1")] { <br;  } 
     } 
 }
 tpl [IterStep/From] 
-{ 
-   linkbyif(#line=`@line`,#col=`@col`,#by="from");
-   <span { @class="lab"; getref(#k="S", #anr=`@articlenr`, #nr=`@nr`); "(";
-        list(#separ=", ", #elems=`Ref`); ")"; } 
+{
+    linkbyif(#line=`@line`,#col=`@col`,#by="from");
+    
+    <span 
+    { 
+        @class="lab";
+	
+	if [@articlenr=0] {
+		$nr = `@nr`;
+		$nm =  get_vid_name(#vid = `//SchemeBlock[@schemenr=$nr]/@vid`);
+        	getref(#k="S", #anr=`@articlenr`, #nr=`@nr`, #nm =  `$nm` );
+	} else {
+		getref(#k="S", #anr=`@articlenr`, #nr=`@nr` );
+	}
+
+	if [Ref] { "("; list(#separ=", ", #elems=`Ref`); ")"; } 
+    } 
 }
 
 
@@ -395,8 +418,12 @@ tpl [TakeAsVar]
       $addpl = { addp(#pl=`@plevel`); } 
       <a { @NAME=`concat("c",@nr,$addpl)`; }
    }
-   ppconst(#nr=`@nr`, #vid = `Typ[1]/@vid`); " = ";   
-   apply[*[2]]; 
+   ppconst(#nr=`@nr`, #vid = `Typ[1]/@vid`);
+   $vid = `Typ[1]/@vid`; 
+   if [not (Const[@vid = $vid])]{
+	" = ";   
+   apply[*[2]];
+   }
    ";"; try_th_exps(); <br; 
 }
 

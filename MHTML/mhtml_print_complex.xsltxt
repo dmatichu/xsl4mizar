@@ -375,7 +375,7 @@ tpl pp2(#k, #nr, #i, #vis, #la, #loci, #args, #np, #rsym, #parenth, #fnr, #pid)
 
 
 // theorem, definition and scheme references
-tpl getref(#k, #anr, #nr) 
+tpl getref(#k, #anr, #nr, #nm) 
 {
   if [$anr>0] 
   {
@@ -391,7 +391,7 @@ tpl getref(#k, #anr, #nr)
   }
   else 
   {
-     mkref(#aid = $aname, #nr = $nr, #k = $k, #c = "1");
+     mkref(#aid = $aname, #nr = $nr, #k = $k, #c = "1", #nm = $nm);
   }
 }
 
